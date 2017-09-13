@@ -1,0 +1,6 @@
+%
+N
+CHEM
+001
+email@ucmerced.edu
+#END
