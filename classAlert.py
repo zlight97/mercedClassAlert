@@ -36,7 +36,7 @@ server.starttls()
 server.login("email@gmail.com", "password")
 while (1):
 	time.sleep(60)
-	url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm=201730&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
+	url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm=201810&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
 	print(url)
 	r = requests.get(url)
 	check = "crsenumb="+num+"&"
