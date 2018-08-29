@@ -1,8 +1,20 @@
 import time
 import smtplib
 import requests
+import datetime
 
+now = datetime.datetime.now()
+term = ''
 
+if now.month>9:
+	term = term + str(1+now.year)
+else:
+	term = term+str(now.year)
+
+if now.month>9 or now.month<3:#codes are 10 for spring, 20 for summer, 30 for fall, 40 for winter
+	term = term+'30'
+else:
+	term = term+'10'
 
 skip = ''
 pos = 0
@@ -36,7 +48,7 @@ server.starttls()
 server.login("email@gmail.com", "password")
 while (1):
 	time.sleep(60)
-	url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm=201810&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
+	url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
 	print(url)
 	r = requests.get(url)
 	check = "crsenumb="+num+"&"
