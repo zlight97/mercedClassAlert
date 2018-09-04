@@ -94,7 +94,7 @@ def run():
 	global pos
 	while (1):
 		time.sleep(5)
-		if '#END' in cur[pos+1]:
+		if 'SKIP' in cur[pos-4]:
 			continue
 		url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
 		print(url)
