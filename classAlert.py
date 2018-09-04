@@ -105,8 +105,8 @@ def run():
 				print(code)
 				server.sendmail("email@gmail.com",email,msg)
 				print(email)
-				cur[pos-4] = 'SKIP\n'
-				writeFile('classList.txt',pos-4,'SKIP')
+				cur[pos-4] = 'SKIP'
+				writeFile('classList.txt',pos-4,'SKIP\n')
 				break
 		if pos > cur.size or '#END' in cur[pos]:
 			time.sleep(60)
