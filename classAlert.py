@@ -123,6 +123,7 @@ def run():
 def wrap():
 	while (1):
 		try:
+			time.sleep(10)
 			run()
 		except BaseException as e:
 			print(('{!r}'.format(e)))
