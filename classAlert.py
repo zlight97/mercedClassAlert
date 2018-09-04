@@ -6,7 +6,7 @@ import threading
 
 now = datetime.datetime.now()
 term = ''
-
+terminate = False
 if now.month>9:
 	term = term + str(1+now.year)
 else:
@@ -33,7 +33,8 @@ def inp():
 		if stage==0:
 			print("type a 3 or 4 letter code to begin adding new. Type quit to quit")
 		inp = raw_input()
-		if inp == quit:
+		if inp == 'quit':
+			terminate = True
 			break
 		elif stage == 0:
 			print("What is the three didget code for the class?")
@@ -94,6 +95,8 @@ def run():
 	global pos
 	while (1):
 		time.sleep(5)
+		if terminate:
+			break
 		if 'SKIP' in cur[pos-4]:
 			pos = nextPos(pos)
 			continue
