@@ -24,12 +24,15 @@ def writeFile(filename, line, message):
 	with open(filename,'w') as f:
 		f.writelines(wr)
 
-def inp():
+def inp(thread):
+	global terminate
 	stage = 0
 	entry = []
 	entry.append('%\n')
 	entry.append('N\n')
 	while(1):
+		# if p.isAlive() == False:
+			# p.start()
 		if stage==0:
 			print("type a 3 or 4 letter code to begin adding new. Type quit to quit")
 		inp = raw_input()
@@ -104,7 +107,7 @@ def run():
 		print(url)
 		r = requests.get(url)
 		check = "crsenumb="+num+"&"
-		#print(check)
+		print(check)
 		for string in r.text.split():
 			if check in string:
 				msg = "There is an opening in "+code+" "+num
@@ -117,10 +120,18 @@ def run():
 		if '#END' in cur[pos]:
 			time.sleep(60)
 		pos = nextPos(pos)
+def wrap():
+	while (1):
+		try:
+			run()
+		except BaseException as e:
+			print(('{!r}'.format(e)))
+		else:
+			print('Restarting thread')
 if __name__ == '__main__':
-    p = threading.Thread(target=run)
+    p = threading.Thread(target=wrap)
     p.daemon = True
     p.start()
-    inp()
+    inp(p)
 server.quit()
 print('1')
