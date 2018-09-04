@@ -94,21 +94,23 @@ def run():
 	global pos
 	while (1):
 		time.sleep(5)
+		if '#END' in cur[pos+1]:
+			continue
 		url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
 		print(url)
 		r = requests.get(url)
 		check = "crsenumb="+num+"&"
-		print(check)
+		#print(check)
 		for string in r.text.split():
 			if check in string:
 				msg = "There is an opening in "+code+" "+num
 				print(code)
 				server.sendmail("email@gmail.com",email,msg)
-				print(email)
+				#print(email)
 				cur[pos-4] = 'SKIP'
 				writeFile('classList.txt',pos-4,'SKIP\n')
 				break
-		if pos > cur.size or '#END' in cur[pos]:
+		if '#END' in cur[pos]:
 			time.sleep(60)
 		pos = nextPos(pos)
 if __name__ == '__main__':
