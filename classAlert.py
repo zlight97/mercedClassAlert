@@ -13,9 +13,9 @@ else:
 	term = term+str(now.year)
 
 if now.month>9 or now.month<3:#codes are 10 for spring, 20 for summer, 30 for fall, 40 for winter
-	term = term+'30'
-else:
 	term = term+'10'
+else:
+	term = term+'30'
 
 def writeFile(filename, line, message):
 	with open(filename, 'r') as f:
@@ -34,11 +34,16 @@ def inp(thread):
 		# if p.isAlive() == False:
 			# p.start()
 		if stage==0:
-			print("type a 3 or 4 letter code to begin adding new. Type quit to quit")
+			print("type a 3 or 4 letter code or CRN to begin adding new. Type quit to quit")
 		inp = raw_input()
 		if inp == 'quit':
 			terminate = True
 			break
+		elif stage == 0 and list(inp)[0]<'A':
+			entry.append(str(inp)+"\n")
+			entry.append("FILLED\n")
+			stage = 2
+			print("What is the email you would like to use?\nPhone numbers can be used as #@carrieremail.com e.g. 55555555@vtext.com")
 		elif stage == 0:
 			print("What is the three didget code for the class?")
 			stage = stage+1
@@ -94,24 +99,63 @@ pos = nextPos(pos)
 server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
 server.login("email@gmail.com", "password")
+crnTbl = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
+def getCRNtbl():
+	global term
+	global crnTbl
+	while(1):
+		global crnTbl
+		url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y'
+		crnTbl = requests.get(url)
+		time.sleep(30)
+
+def crn(number):
+	global crnTbl
+	global term
+	asdf = 'crn='+str(number)
+	# print(crnTbl.text)
+	for st in crnTbl.text.split():
+		if asdf in st:
+			msg = "There is an opening in "+number
+			print("There is an opening in "+number)
+			server.sendmail("email@gmail.com",email,msg)
+			#print(email)
+			cur[pos-4] = 'SKIP'
+			writeFile('classList.txt',pos-4,'SKIP\n')
+			break
+	if '#END' in cur[pos]:
+		time.sleep(60)
+		crnTbl = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
+
+
 def run():
+	global term
 	global pos
+	global crnTbl
 	while (1):
 		time.sleep(5)
 		if terminate:
 			break
 		if 'SKIP' in cur[pos-4]:
+			if '#END' in cur[pos]:
+				time.sleep(60)
+				crnTbl = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
+			pos = nextPos(pos)
+			continue
+		if list(code)[0] < 'A':
+			crn(code)
+			# print('triggered')
 			pos = nextPos(pos)
 			continue
 		url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
-		print(url)
+		# print(url)
 		r = requests.get(url)
 		check = "crsenumb="+num+"&"
-		print(check)
+		# print(check)
 		for string in r.text.split():
 			if check in string:
 				msg = "There is an opening in "+code+" "+num
-				print(code)
+				print("There is an opening in "+code+" "+num)
 				server.sendmail("email@gmail.com",email,msg)
 				#print(email)
 				cur[pos-4] = 'SKIP'
@@ -119,6 +163,7 @@ def run():
 				break
 		if '#END' in cur[pos]:
 			time.sleep(60)
+			crnTbl = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
 		pos = nextPos(pos)
 def wrap():
 	while (1):
@@ -129,10 +174,22 @@ def wrap():
 			print(('{!r}'.format(e)))
 		else:
 			print('Restarting thread')
+# def wrapCRN():
+# 	while (1):
+# 		try:
+# 			time.sleep(10)
+# 			getCRNtbl()
+# 		except BaseException as e:
+# 			print(('{!r}'.format(e)))
+# 		else:
+# 			print('Restarting thread')
 if __name__ == '__main__':
     p = threading.Thread(target=wrap)
     p.daemon = True
+    # crnT = threading.Thread(target=wrapCRN)
+    # crnT.daemon = False
     p.start()
+    # crnT.start()
     inp(p)
 server.quit()
 print('1')
