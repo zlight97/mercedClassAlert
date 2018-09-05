@@ -65,8 +65,6 @@ def inp(thread):
 			with open('classList.txt','w') as f:
 				f.writelines(wr)
 
-
-
 skip = ''
 pos = 0
 code = ''
@@ -98,7 +96,7 @@ def nextPos(cPos):
 pos = nextPos(pos)
 server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
-server.login("email@gmail.com", "password")
+server.login("email@gmail.com", "password")#CHANGE ME
 crnTbl = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
 def getCRNtbl():
 	global term
@@ -112,14 +110,12 @@ def getCRNtbl():
 def crn(number):
 	global crnTbl
 	global term
-	asdf = 'crn='+str(number)
-	# print(crnTbl.text)
+	crnStr = 'crn='+str(number)
 	for st in crnTbl.text.split():
-		if asdf in st:
+		if crnStr in st:
 			msg = "There is an opening in "+number
-			print("There is an opening in "+number)
-			server.sendmail("email@gmail.com",email,msg)
-			#print(email)
+			print(msg)
+			server.sendmail("email@gmail.com",email,msg)#CHANGE ME
 			cur[pos-4] = 'SKIP'
 			writeFile('classList.txt',pos-4,'SKIP\n')
 			break
@@ -144,20 +140,16 @@ def run():
 			continue
 		if list(code)[0] < 'A':
 			crn(code)
-			# print('triggered')
 			pos = nextPos(pos)
 			continue
 		url = 'https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode='+code+'&openclasses=Y' #validterm will need to change based on term, could make part of text file, but easy enough to deal with
-		# print(url)
 		r = requests.get(url)
 		check = "crsenumb="+num+"&"
-		# print(check)
 		for string in r.text.split():
 			if check in string:
 				msg = "There is an opening in "+code+" "+num
-				print("There is an opening in "+code+" "+num)
-				server.sendmail("email@gmail.com",email,msg)
-				#print(email)
+				print(msg)
+				server.sendmail("email@gmail.com",email,msg)#CHANGE ME
 				cur[pos-4] = 'SKIP'
 				writeFile('classList.txt',pos-4,'SKIP\n')
 				break
@@ -174,22 +166,10 @@ def wrap():
 			print(('{!r}'.format(e)))
 		else:
 			print('Restarting thread')
-# def wrapCRN():
-# 	while (1):
-# 		try:
-# 			time.sleep(10)
-# 			getCRNtbl()
-# 		except BaseException as e:
-# 			print(('{!r}'.format(e)))
-# 		else:
-# 			print('Restarting thread')
 if __name__ == '__main__':
     p = threading.Thread(target=wrap)
     p.daemon = True
-    # crnT = threading.Thread(target=wrapCRN)
-    # crnT.daemon = False
     p.start()
-    # crnT.start()
     inp(p)
 server.quit()
 print('1')
