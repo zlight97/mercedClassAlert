@@ -1,0 +1,17 @@
+{
+    "classes": [
+        {
+            "usesCRN": "true",
+            "sent": "false",
+            "crn": "30123",
+            "email": "email@ucmerced.edu"
+        },
+        {
+            "usesCRN": "false",
+            "sent": "false",
+            "division": "BIO",
+            "code": "001",
+            "email": "email@ucmerced.edu"
+        }
+    ]
+}
