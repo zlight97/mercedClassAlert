@@ -1,7 +1,0 @@
-TODO:
-Update classAlert.py
-    instead of using .txt use .json
-        Encode everything into json, to make read and write easy
-            Could even allow for a interface through web to be used
-    instead of pulling multiple links, do the ALL link every minute, and search for a larger term
-    

@@ -1,6 +1,0 @@
-%
-SKIP
-BIO
-001
-email@ucmerced.edu
-#END
