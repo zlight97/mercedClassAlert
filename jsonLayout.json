@@ -1,17 +1,22 @@
 {
-    "classes": [
+    "botEmail":"email@gmail.com",
+    "botPassword":"password",
+    "cLayout":[
         {
-            "usesCRN": "true",
-            "sent": "false",
-            "crn": "30123",
-            "email": "email@ucmerced.edu"
+            "crn":"30290",
+            "email":"email@ucmerced.edu",
+            "sent":false,
+            "usesCRN":true
         },
         {
-            "usesCRN": "false",
-            "sent": "false",
-            "division": "BIO",
-            "code": "001",
-            "email": "email@ucmerced.edu"
+            "code":"001",
+            "email":"email@ucmerced.edu",
+            "sent":false,
+            "subj":"BIO",
+            "usesCRN":false
         }
+    ],
+    "classes":[
+ 
     ]
 }
