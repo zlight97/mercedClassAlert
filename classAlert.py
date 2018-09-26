@@ -90,7 +90,7 @@ def check():
 						
 			else:
 				print "JSON format INCORRECT\nTerminating Program"
-				return
+				exit()
 
 
 def wrap():
