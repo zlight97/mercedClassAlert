@@ -10,13 +10,11 @@
         },
         {
             "code":"001",
-            "email":"email@ucmerced.edu",
+            "email":"test@test.com",
             "sent":false,
             "subj":"BIO",
             "usesCRN":false
         }
     ],
-    "classes":[
- 
-    ]
+    "classes":[]
 }

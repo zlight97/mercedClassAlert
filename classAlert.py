@@ -7,19 +7,38 @@ import json
 
 now = datetime.datetime.now()
 term = ''
-if now.month > 9:
-	term = term + str(1+now.year)
-else:
-	term = term+str(now.year)
+isSpring = None
 
-if now.month > 9 or now.month < 3:  # codes are 10 for spring, 20 for summer, 30 for fall, 40 for winter
-	term = term+'10'
-else:
-	term = term+'30'
 with open("jsonLayout.json", "r") as r:
 	jsonData = json.load(r)
 
+def checkTerm():
+	global term
+	global isSpring
+	term = ''
+	if now.month > 9:
+		term = term + str(1+now.year)
+	else:
+		term = term+str(now.year)
 
+	if now.month > 9 or now.month < 3:  # codes are 10 for spring, 20 for summer, 30 for fall, 40 for winter
+		if isSpring == False:
+			clearTable()
+		term = term+'10'
+		isSpring = True
+	else:
+		if isSpring == True:
+			clearTable()
+		term = term+'30'
+		isSpring = False
+
+def clearTable():
+	global jsonData
+	with open("jsonLayout.json", "r") as r:
+		jsonData = json.load(r)
+	jsonData["classes"][:] = []
+	write(jsonData)
+	
 def write(jData):
 	with open("jsonLayout.json", "w") as r:
 		r.write(json.dumps(jData, sort_keys=True, indent=4, separators=(',', ':')))
@@ -34,6 +53,8 @@ def inp(thread):
 		inp = raw_input()
 		if inp == 'quit':
 			break
+		elif inp=='clear':
+			clearTable()
 		elif stage == 0 and list(inp)[0] < 'A':
 			entry = jsonData["cLayout"][0]
 			entry["crn"] = str(inp)
@@ -105,6 +126,7 @@ def wrap():
 
 
 if __name__ == '__main__':
+    checkTerm()
     p = threading.Thread(target=wrap)
     p.daemon = True
     p.start()

@@ -2,6 +2,11 @@
 
     $class = $_GET["class"];
     $email = $_GET["email"];
+    if($email == null)
+    {
+        echo("No email detected");
+        exit();
+    }
     $jsObj->email=$email;
     $jsObj->sent=false;
     $class = strtoupper($class);
@@ -19,7 +24,7 @@
         $count = 0;
         foreach($split as $st)
         {
-            if($st>='0' and $st<='9')
+            if($st<'A' or $st>'Z')
                 break;
             $count++;
         }
@@ -40,8 +45,18 @@
         echo ( "Error in opening file" );
         exit();
     }
+    echo ("Added ");
+    if($jsObj->usesCRN===true)
+    {
+        echo($class);    
+    }
+    else{
+        echo($subj.$code);
+    }
+    echo(" to email ".$email."<br>If this looks wrong, resubmit the form with the correct data");
     fwrite($file,$jsonObj);
     fclose($file);
+    echo("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"5; URL=index.html#form\">");
     // echo $json_a[];
     exit();
 ?>
