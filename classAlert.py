@@ -5,7 +5,6 @@ import datetime
 import threading
 import json
 
-now = datetime.datetime.now()
 term = ''
 isSpring = None
 
@@ -15,6 +14,7 @@ with open("jsonLayout.json", "r") as r:
 def checkTerm():
 	global term
 	global isSpring
+	now = datetime.datetime.now()
 	term = ''
 	if now.month > 9:
 		term = term + str(1+now.year)
@@ -77,9 +77,6 @@ def inp(thread):
 
 
 
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login(jsonData["botEmail"], jsonData["botPassword"])
 def check():
 	global jsonData
 	while 1:
@@ -107,8 +104,7 @@ def check():
 						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"])
 						obj["sent"] = True
 						write(jsonData)
-						break
-						
+						break		
 			else:
 				print "JSON format INCORRECT\nTerminating Program"
 				exit()
@@ -126,10 +122,13 @@ def wrap():
 
 
 if __name__ == '__main__':
-    checkTerm()
-    p = threading.Thread(target=wrap)
-    p.daemon = True
-    p.start()
-    inp(p)
+	server = smtplib.SMTP('smtp.gmail.com', 587)
+	server.starttls()
+	server.login(jsonData["botEmail"], jsonData["botPassword"])
+	checkTerm()
+	p = threading.Thread(target=wrap)
+	p.daemon = True
+	p.start()
+	inp(p)
 server.quit()
 print('Program sucessfully terminated')
