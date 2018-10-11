@@ -95,6 +95,7 @@ def check():
 						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
 						print "There is an opening in " + str(obj["crn"])
 						obj["sent"] = True
+						jsonData["classes"].remove(obj)
 						write(jsonData)
 						break
 			elif not obj["usesCRN"]:
@@ -103,6 +104,7 @@ def check():
 						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
 						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"])
 						obj["sent"] = True
+						jsonData["classes"].remove(obj)
 						write(jsonData)
 						break		
 			else:

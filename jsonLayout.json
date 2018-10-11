@@ -1,6 +1,6 @@
 {
-    "botEmail":"email@gmail.com",
-    "botPassword":"password",
+    "botEmail":"zachclassbot@gmail.com",
+    "botPassword":"botpassword",
     "cLayout":[
         {
             "crn":"30290",
@@ -10,7 +10,7 @@
         },
         {
             "code":"001",
-            "email":"test@test.com",
+            "email":"4082051497@vtext.com",
             "sent":false,
             "subj":"BIO",
             "usesCRN":false
