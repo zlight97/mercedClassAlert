@@ -7,7 +7,7 @@ import json
 
 term = ''
 isSpring = None
-
+termCount = 0
 with open("jsonLayout.json", "r") as r:
 	jsonData = json.load(r)
 
@@ -79,8 +79,13 @@ def inp(thread):
 
 def check():
 	global jsonData
+	global termCount
 	while 1:
 		time.sleep(60)
+		termCount = termCount+1
+		if(termCount>2400):
+			checkTerm()
+			termCount = 0
 		with open("jsonLayout.json", "r") as r:
 			jsonData = json.load(r)
 		if len(jsonData["classes"]) == 0:
