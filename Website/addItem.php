@@ -30,6 +30,16 @@
         }
         $subj = substr($class, 0, $count);
         $code = substr($class, strlen($class)-3,3);
+        $csplit = str_split($code);
+        if($csplit[0]<'0' or $csplit[0]>'9')
+        {
+            $csplit[0]='0';
+        }
+        if($csplit[1]<'0' or $csplit[1]>'9')
+        {
+            $csplit[1]='0';
+        }
+        $code = implode($csplit);
         $jsObj->subj=$subj;
         $jsObj->code=$code;
     }
