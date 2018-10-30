@@ -8,6 +8,7 @@ import json
 term = ''
 isSpring = None
 termCount = 0
+deleteQueue = []
 with open("jsonLayout.json", "r") as r:
 	jsonData = json.load(r)
 
@@ -80,6 +81,7 @@ def inp(thread):
 def check():
 	global jsonData
 	global termCount
+	global deleteQueue
 	while 1:
 		time.sleep(60)
 		termCount = termCount+1
@@ -100,8 +102,7 @@ def check():
 						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
 						print "There is an opening in " + str(obj["crn"])
 						obj["sent"] = True
-						jsonData["classes"].remove(obj)
-						write(jsonData)
+						deleteQueue.append(obj)
 						break
 			elif not obj["usesCRN"]:
 				for st in htmlData.text.split():
@@ -109,12 +110,14 @@ def check():
 						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
 						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"])
 						obj["sent"] = True
-						jsonData["classes"].remove(obj)
-						write(jsonData)
+						deleteQueue.append(obj)
 						break		
 			else:
 				print "JSON format INCORRECT\nTerminating Program"
 				exit()
+		for obj in deleteQueue:
+			jsonData["classes"].remove(obj)
+		write(jsonData)
 
 
 def wrap():
