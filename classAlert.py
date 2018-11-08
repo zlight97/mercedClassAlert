@@ -128,6 +128,12 @@ def wrap():
 			check()
 		except BaseException as e:
 			print(('{!r}'.format(e)))
+		except SMTPServerDisconnected as excp:
+			print(('{!r}'.format(excp)))
+			server = smtplib.SMTP('smtp.gmail.com', 587)
+			server.starttls()
+			server.login(jsonData["botEmail"], jsonData["botPassword"])
+
 		else:
 			print('Restarting thread')
 
