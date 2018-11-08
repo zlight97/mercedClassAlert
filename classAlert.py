@@ -146,6 +146,8 @@ if __name__ == '__main__':
 	p = threading.Thread(target=wrap)
 	p.daemon = True
 	p.start()
-	inp(p)
+        print "Running..."
+        p.join()
+	#inp(p)
 server.quit()
 print('Program sucessfully terminated')
