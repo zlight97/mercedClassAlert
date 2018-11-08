@@ -117,7 +117,7 @@ def check():
 				exit()
 		for obj in deleteQueue:
 			jsonData["classes"].remove(obj)
-		deleteQueue.clear()
+                del deleteQueue[:]
 		write(jsonData)
 
 
