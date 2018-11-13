@@ -126,7 +126,7 @@ def wrap():
 		try:
 			time.sleep(10)
 			check()
-			server.connect()
+			server.connect('smtp.gmail.com', 587)
 		except BaseException as e:
 			print(('{!r}'.format(e)))
 		except SMTPServerDisconnected as excp:
