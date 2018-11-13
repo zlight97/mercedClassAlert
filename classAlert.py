@@ -126,16 +126,12 @@ def wrap():
 		try:
 			time.sleep(10)
 			check()
+			server.connect()
 		except BaseException as e:
 			print(('{!r}'.format(e)))
 		except SMTPServerDisconnected as excp:
 			print(('{!r}'.format(excp)))
-			server = smtplib.SMTP('smtp.gmail.com', 587)
-			server.starttls()
-			server.login(jsonData["botEmail"], jsonData["botPassword"])
-
-		else:
-			print('Restarting thread')
+		print('Restarting thread')
 
 
 if __name__ == '__main__':
@@ -146,8 +142,8 @@ if __name__ == '__main__':
 	p = threading.Thread(target=wrap)
 	p.daemon = True
 	p.start()
-        print "Running..."
-        p.join()
+	print "Running..."
+	p.join()
 	#inp(p)
 server.quit()
 print('Program sucessfully terminated')
