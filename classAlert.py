@@ -83,6 +83,10 @@ def check():
 	global termCount
 	global deleteQueue
 	while 1:
+
+		server = smtplib.SMTP('smtp.gmail.com', 587)
+		server.starttls()
+		server.login(jsonData["botEmail"], jsonData["botPassword"])
 		time.sleep(60)
 		termCount = termCount+1
 		if(termCount>2400):
@@ -115,6 +119,7 @@ def check():
 			else:
 				print "JSON format INCORRECT\nTerminating Program"
 				exit()
+		server.quit()
 		for obj in deleteQueue:
 			jsonData["classes"].remove(obj)
                 del deleteQueue[:]
@@ -126,7 +131,6 @@ def wrap():
 		try:
 			time.sleep(10)
 			check()
-			server.connect('smtp.gmail.com', 587)
 		except BaseException as e:
 			print(('{!r}'.format(e)))
 		except SMTPServerDisconnected as excp:
@@ -135,9 +139,7 @@ def wrap():
 
 
 if __name__ == '__main__':
-	server = smtplib.SMTP('smtp.gmail.com', 587)
-	server.starttls()
-	server.login(jsonData["botEmail"], jsonData["botPassword"])
+
 	checkTerm()
 	p = threading.Thread(target=wrap)
 	p.daemon = True
@@ -145,5 +147,4 @@ if __name__ == '__main__':
 	print "Running..."
 	p.join()
 	#inp(p)
-server.quit()
 print('Program sucessfully terminated')
