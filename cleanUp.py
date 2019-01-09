@@ -12,22 +12,26 @@ def cleanUp():
         if not entry["usesCRN"]:
             if len(entry["code"]) != 3:
                 deleteQueue.append(entry)
+                print found
                 continue
                 #checking for valid code should go here
         else:
             if len(entry["crn"])!=5:
                 deleteQueue.append(entry)
+                print found
                 continue
         if "@" not in entry["email"]:
             deleteQueue.append(entry)
+            print found
             continue
         if "." not in entry["email"]:
             deleteQueue.append(entry)
+            print found
             continue
         if entry["sent"]:
             deleteQueue.append(entry)
+            print found
             continue
     for obj in deleteQueue:
         jsonData["classes"].remove(obj)
-        del deleteQueue[:]
     write(jsonData)
