@@ -28,13 +28,24 @@ def populateTerm():
                 jsonObject["classes"] = []
     write("classList.json", arrayObj)
 
+def readClassList(i=0):
+    try:
+     with open("classList.json", "r") as r:
+	    classList = json.load(r)
+     return classList
+    except:
+        populateTerm()
+        if i is 0:
+            return readClassList(1)
+    print "crash or something?"
+    return json.dumps({})
 
 def cleanUp():
+    print "Cleanup started"
     deleteQueue = []
     with open("jsonLayout.json", "r") as r:
 	    jsonData = json.load(r)
-    with open("classList.json", "r") as r:
-	    classList = json.load(r)
+    classList = readClassList()
     classMap = {}
     for entry in classList["list"]:
         classMap[entry["subject"]]=set(entry["classes"])
