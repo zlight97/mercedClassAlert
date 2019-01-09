@@ -33,13 +33,24 @@ def cleanUp():
     deleteQueue = []
     with open("jsonLayout.json", "r") as r:
 	    jsonData = json.load(r)
+    with open("classList.json", "r") as r:
+	    classList = json.load(r)
+    classMap = {}
+    for entry in classList["list"]:
+        classMap[entry["subject"]]=set(entry["classes"])
     count = 0
     for entry in jsonData["classes"]:
         if not entry["usesCRN"]:
-            if len(entry["code"]) != 3:
+            # if len(entry["code"]) != 3:
+            #     deleteQueue.append(entry)
+            #     continue
+            if entry["subj"] not in classMap:
                 deleteQueue.append(entry)
                 continue
-                #checking for valid code should go here
+            elif entry["code"] not in classMap[entry["subj"]]:
+                deleteQueue.append(entry)
+                continue
+                
         else:
             if len(entry["crn"])!=5:
                 deleteQueue.append(entry)
@@ -59,5 +70,4 @@ def cleanUp():
         count+=1
     write("jsonLayout.json", jsonData)
     print "Ammount deleted: " + str(count)
-
 cleanUp()
