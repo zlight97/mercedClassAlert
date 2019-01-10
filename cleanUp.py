@@ -81,4 +81,4 @@ def cleanUp():
         count+=1
     write("jsonLayout.json", jsonData)
     print "Ammount deleted: " + str(count)
-cleanUp()
+# cleanUp()

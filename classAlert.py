@@ -4,7 +4,9 @@ import requests
 import datetime
 import threading
 import json
+import cleanUp
 
+print "Start"
 term = ''
 isSpring = None
 termCount = 0
@@ -13,6 +15,7 @@ with open("jsonLayout.json", "r") as r:
 	jsonData = json.load(r)
 
 def checkTerm():
+	print "Check Term called"
 	global term
 	global isSpring
 	now = datetime.datetime.now()
@@ -32,6 +35,8 @@ def checkTerm():
 			clearTable()
 		term = term+'30'
 		isSpring = False
+	print "Check Term Finished"
+	return term
 
 def clearTable():
 	global jsonData
@@ -39,8 +44,10 @@ def clearTable():
 		jsonData = json.load(r)
 	jsonData["classes"][:] = []
 	write(jsonData)
+	print "Table cleared"
 	
 def write(jData):
+	print "Write called"
 	with open("jsonLayout.json", "w") as r:
 		r.write(json.dumps(jData, sort_keys=True, indent=4, separators=(',', ':')))
 
@@ -83,10 +90,11 @@ def check():
 	global termCount
 	global deleteQueue
 	while 1:
-
+		print "Connecting to SMTP"
 		server = smtplib.SMTP('smtp.gmail.com', 587)
 		server.starttls()
 		server.login(jsonData["botEmail"], jsonData["botPassword"])
+		print "Sleep began"
 		time.sleep(60)
 		termCount = termCount+1
 		if(termCount>2400):
@@ -94,6 +102,7 @@ def check():
 			termCount = 0
 		with open("jsonLayout.json", "r") as r:
 			jsonData = json.load(r)
+		print "jsonLayout loaded"
 		if len(jsonData["classes"]) == 0:
 			continue
 		htmlData = requests.get('https://mystudentrecord.ucmerced.edu/pls/PROD/xhwschedule.P_ViewSchedule?validterm='+term+'&subjcode=ALL&openclasses=Y')
@@ -103,16 +112,16 @@ def check():
 			elif obj["usesCRN"]:
 				for st in htmlData.text.split():
 					if 'crn='+obj["crn"] in st:
-						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
-						print "There is an opening in " + str(obj["crn"])
+						# server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
+						print "There is an opening in " + str(obj["crn"]) + " email: "+str(obj["email"])
 						obj["sent"] = True
 						deleteQueue.append(obj)
 						break
 			elif not obj["usesCRN"]:
 				for st in htmlData.text.split():
 					if "subjcode="+ obj["subj"] +"&crsenumb="+obj["code"] in st:
-						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
-						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"])
+						# server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
+						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]) + " email: "+str(obj["email"])
 						obj["sent"] = True
 						deleteQueue.append(obj)
 						break		
@@ -121,8 +130,9 @@ def check():
 				exit()
 		server.quit()
 		for obj in deleteQueue:
+			print "removing email: "+str(obj["email"])
 			jsonData["classes"].remove(obj)
-                del deleteQueue[:]
+		del deleteQueue[:]
 		write(jsonData)
 
 
@@ -139,12 +149,12 @@ def wrap():
 
 
 if __name__ == '__main__':
-
 	checkTerm()
+	cleanUp.cleanUp()
 	p = threading.Thread(target=wrap)
 	p.daemon = True
 	p.start()
 	print "Running..."
 	p.join()
 	#inp(p)
-print('Program sucessfully terminated')
+	print('Program sucessfully terminated')
