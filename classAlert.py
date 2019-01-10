@@ -99,6 +99,7 @@ def check():
 		termCount = termCount+1
 		if(termCount>2400):
 			checkTerm()
+			cleanUp.cleanUp()
 			termCount = 0
 		with open("jsonLayout.json", "r") as r:
 			jsonData = json.load(r)
@@ -133,6 +134,7 @@ def check():
 			print "removing email: "+str(obj["email"])
 			jsonData["classes"].remove(obj)
 		del deleteQueue[:]
+		print "Writing the deleted data"
 		write(jsonData)
 
 
