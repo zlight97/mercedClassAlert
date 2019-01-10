@@ -6,4 +6,4 @@ if [ ! -d Logs ]; then
 fi
 filename=$(date +'Logs/%m.%d.%Y,%H:%M:%S.log')
 echo Lauching classAlert.py
-python classAlert.py | tee $filename
+python -u classAlert.py | tee $filename
