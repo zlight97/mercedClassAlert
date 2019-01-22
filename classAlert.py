@@ -113,7 +113,7 @@ def check():
 			elif obj["usesCRN"]:
 				for st in htmlData.text.split():
 					if 'crn='+obj["crn"] in st:
-						# server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
+						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["crn"]))
 						print "There is an opening in " + str(obj["crn"]) + " email: "+str(obj["email"])
 						obj["sent"] = True
 						deleteQueue.append(obj)
@@ -121,7 +121,7 @@ def check():
 			elif not obj["usesCRN"]:
 				for st in htmlData.text.split():
 					if "subjcode="+ obj["subj"] +"&crsenumb="+obj["code"] in st:
-						# server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
+						server.sendmail(jsonData["botEmail"], str(obj["email"]), "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]))
 						print "There is an opening in " + str(obj["subj"]) + " " + str(obj["code"]) + " email: "+str(obj["email"])
 						obj["sent"] = True
 						deleteQueue.append(obj)
