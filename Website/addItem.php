@@ -66,6 +66,8 @@
     echo(" to email ".$email."<br>If this looks wrong, resubmit the form with the correct data");
     fwrite($file,$jsonObj);
     fclose($file);
+    $line = date('Y-m-d H:i:s') . " - $_SERVER[REMOTE_ADDR] - " .$email;
+    file_put_contents('visitors.log', $line . PHP_EOL, FILE_APPEND);
     echo("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"5; URL=index.html#form\">");
     // echo $json_a[];
     exit();
