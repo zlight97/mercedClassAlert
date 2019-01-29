@@ -9,4 +9,3 @@ def getOnionIPList():
     f.write(a)
     print "ip list written"
     f.close()
-getOnionIPList()
