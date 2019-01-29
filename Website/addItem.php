@@ -64,11 +64,37 @@
         echo($subj.$code);
     }
     echo(" to email ".$email."<br>If this looks wrong, resubmit the form with the correct data");
-    fwrite($file,$jsonObj);
-    fclose($file);
-    $line = date('Y-m-d H:i:s') . " - $_SERVER[REMOTE_ADDR] - " .$email;
-    file_put_contents('visitors.log', $line . PHP_EOL, FILE_APPEND);
+    $ip = $_SERVER[REMOTE_ADDR];
+    if(inFile('ipList.txt',$ip))
+    {
+        $line = date('Y-m-d H:i:s') . " - $_SERVER[REMOTE_ADDR] - " .$email;
+        file_put_contents('blockedSubmission.log', $line . PHP_EOL, FILE_APPEND);
+    }
+    else{
+        fwrite($file,$jsonObj);
+        fclose($file);
+        $line = date('Y-m-d H:i:s') . " - $_SERVER[REMOTE_ADDR] - " .$email;
+        file_put_contents('visitors.log', $line . PHP_EOL, FILE_APPEND);
+    }
     echo("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"5; URL=index.html#form\">");
     // echo $json_a[];
     exit();
+
+    function inFile($filename, $key)
+    {
+        $searchfor = 'name';
+
+        $contents = file_get_contents($filename);
+        if($contents==false)
+        {
+            echo ("error opening file");
+            exit();
+        }
+        $pattern = preg_quote($key, '/');
+        $pattern = "/^.*$pattern.*\$/m";
+        if(preg_match_all($pattern, $contents)){
+            return true;
+        }
+        return false;
+    }
 ?>

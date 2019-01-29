@@ -5,6 +5,7 @@ import datetime
 import threading
 import json
 import cleanUp
+import onionIp
 
 print "Start"
 term = ''
@@ -100,6 +101,7 @@ def check():
 		if(termCount>2400):
 			checkTerm()
 			cleanUp.cleanUp()
+			onionIp.getOnionIPList()
 			termCount = 0
 		with open("jsonLayout.json", "r") as r:
 			jsonData = json.load(r)
@@ -153,6 +155,7 @@ def wrap():
 if __name__ == '__main__':
 	checkTerm()
 	cleanUp.cleanUp()
+	onionIp.getOnionIPList()
 	p = threading.Thread(target=wrap)
 	p.daemon = True
 	p.start()
