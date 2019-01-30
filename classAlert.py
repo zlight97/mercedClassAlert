@@ -50,16 +50,12 @@ def clearTable():
 	
 def makeBackup():
 	filename = str(datetime.datetime.now())+".json.bkup"
-	# file = open(filename, "w+")
-	# f.write("")
-	# f.close()
-	filepath = os.path.join('~/BobcatBackups', filename)
-	if not os.path.exists('~/BobcatBackups'):
-		os.makedirs('~/BobcatBackups')
+	filepath = os.path.join('/home/'+getpass.getuser()+'/BobcatBackups', filename)
 	with open("jsonLayout.json", "r") as r:
 		backupData = json.load(r)
 	with open(filepath, "w+") as r:
 		r.write(json.dumps(backupData, sort_keys=True, indent=4, separators=(',', ':')))
+
 def write(jData):
 	print "Write called"
 	with open("jsonLayout.json", "w") as r:
